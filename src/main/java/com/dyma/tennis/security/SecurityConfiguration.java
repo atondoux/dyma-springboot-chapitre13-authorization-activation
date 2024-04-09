@@ -41,17 +41,17 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizations ->
                         authorizations
+                                .requestMatchers("/swagger-ui/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**").permitAll()
+                                .requestMatchers("/accounts/login").permitAll()
                                 .requestMatchers("/healthcheck").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/players/**").hasAuthority("ROLE_USER")
-                                .requestMatchers(HttpMethod.PUT, "/players/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/players/**").hasAuthority("ROLE_ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/players/**").hasAuthority("ROLE_ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/players/**").hasAuthority("ROLE_ADMIN")
                                 .anyRequest().authenticated()
-                )
-                .formLogin(form ->
-                        form.defaultSuccessUrl("/swagger-ui/index.html#/", true)
                 );
-
         return http.build();
     }
+
 }
