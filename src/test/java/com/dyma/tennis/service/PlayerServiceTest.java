@@ -13,8 +13,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 public class PlayerServiceTest {
 
     @Mock
@@ -62,9 +60,8 @@ public class PlayerServiceTest {
         Mockito.when(playerRepository.findOneByLastNameIgnoreCase(unknownPlayer)).thenReturn(Optional.empty());
 
         // When / Then
-        Exception exception = assertThrows(PlayerNotFoundException.class, () -> {
-            playerService.getByLastName(unknownPlayer);
-        });
-        Assertions.assertThat(exception.getMessage()).isEqualTo("Player with last name doe could not be found.");
+        Assertions.assertThatThrownBy(() -> playerService.getByLastName(unknownPlayer))
+                .isInstanceOf(PlayerNotFoundException.class)
+                .hasMessage("Player with last name doe could not be found.");
     }
 }
